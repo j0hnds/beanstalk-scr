@@ -1,0 +1,5 @@
+# Vim junk
+*.swp
+
+# NPM stuff
+node_modules
