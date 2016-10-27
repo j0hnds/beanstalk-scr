@@ -25,7 +25,6 @@ class ClientAPI {
 
     url += '/beanstalk'
 
-    console.log('URL: %s', url + uri)
     return url + uri
   }
 

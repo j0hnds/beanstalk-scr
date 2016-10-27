@@ -88,6 +88,11 @@ const tubeList = blessed.listtable({
   align: 'left',
   interactive: true,
   keys: [ 'up', 'down' ],
+  vi: true,
+  scrollbar: {
+    bg: 'red',
+    fg: 'blue'
+  },
   style: {
     cell: {
       selected: {
@@ -99,10 +104,6 @@ const tubeList = blessed.listtable({
     },
     header: {
       bold: true
-    },
-    scrollbar: {
-      bg: 'red',
-      fg: 'blue'
     }
   }
 })
@@ -114,7 +115,6 @@ function urlTubeName (tubeName) {
 tubeList.on('select', (data, index) => {
   clientApi.get('/tubes/' + urlTubeName(data.content.trim()), {})
     .then((data) => {
-      // console.log("Data: %j", data)
       let hdr = [ [ 'Attribute', 'Value' ] ]
       let arr = [
         [ 'current_jobs_ready', '' + data['current_jobs_ready'] ],
@@ -139,13 +139,13 @@ const results = blessed.listtable({
   height: '100%',
   align: 'right',
   vi: true,
+  scrollbar: {
+    bg: 'red',
+    fg: 'blue'
+  },
   style: {
     header: {
       bold: true
-    },
-    scrollbar: {
-      bg: 'red',
-      fg: 'blue'
     }
   }
 })
