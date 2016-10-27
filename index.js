@@ -134,9 +134,12 @@ const results = blessed.listtable({
 // const results = blessed.listtable({
   parent: screen,
   mouse: true,
+  border: {
+    type: 'line'
+  },
   top: 2,
   left: 20,
-  height: '100%',
+  height: 14,
   align: 'right',
   vi: true,
   scrollbar: {
