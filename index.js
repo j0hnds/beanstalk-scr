@@ -108,12 +108,8 @@ const tubeList = blessed.listtable({
   }
 })
 
-function urlTubeName (tubeName) {
-  return new Buffer(tubeName).toString('base64')
-}
-
 tubeList.on('select', (data, index) => {
-  clientApi.get('/tubes/' + urlTubeName(data.content.trim()), {})
+  clientApi.get('/tubes/' + clientApi.urlTubeName(data.content.trim()), {})
     .then((data) => {
       let hdr = [ [ 'Attribute', 'Value' ] ]
       let arr = [
@@ -131,7 +127,6 @@ tubeList.on('select', (data, index) => {
 })
 
 const results = blessed.listtable({
-// const results = blessed.listtable({
   parent: screen,
   mouse: true,
   border: {
@@ -142,10 +137,6 @@ const results = blessed.listtable({
   height: 14,
   align: 'right',
   vi: true,
-  scrollbar: {
-    bg: 'red',
-    fg: 'blue'
-  },
   style: {
     header: {
       bold: true

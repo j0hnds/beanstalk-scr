@@ -36,6 +36,10 @@ class ClientAPI {
     })
   }
 
+  urlTubeName (tubeName) {
+    return new Buffer(tubeName).toString('base64')
+  }
+
 }
 
 module.exports.ClientAPI = ClientAPI
