@@ -3,6 +3,7 @@
 'use strict'
 const blessed = require('blessed')
 const ClientAPI = require('./client_api').ClientAPI
+const MenuBar = require('./menu_bar').MenuBar
 const program = require('commander')
 
 program
@@ -27,54 +28,20 @@ const screen = blessed.screen({ smartCSR: true })
 
 screen.title = 'Beanstalk API'
 
-blessed.listbar({
+const statsList = blessed.listtable({
   parent: screen,
   mouse: true,
-  keys: true,
-  commands: {
-    Invoke: {
-      keys: [ 'i' ],
-      callback: () => {
-        clientApi.get('', {})
-          .then((data) => {
-            let hdr = [ [ 'Attribute', 'Value' ] ]
-            let arr = [
-              [ 'current_jobs_ready', '' + data['current_jobs_ready'] ],
-              [ 'current_jobs_urgent', '' + data['current_jobs_urgent'] ],
-              [ 'current_jobs_reserved', '' + data['current_jobs_reserved'] ],
-              [ 'current_jobs_delayed', '' + data['current_jobs_delayed'] ],
-              [ 'current_jobs_buried', '' + data['current_jobs_buried'] ],
-              [ 'job_timeouts', '' + data['job_timeouts'] ],
-              [ 'current_tubes', '' + data['current_tubes'] ],
-              [ 'current_connections', '' + data['current_connections'] ],
-              [ 'current_workers', '' + data['current_workers'] ],
-              [ 'current_waiting', '' + data['current_waiting'] ],
-              [ 'total_jobs', '' + data['total_jobs'] ]
-            ]
-            results.setData(hdr.concat(arr))
-            tubeList.setData([])
-            screen.render()
-          })
-      }
-    },
-    Tubes: {
-      keys: [ 't' ],
-      callback: () => {
-        clientApi.get('/tubes', {})
-          .then((data) => {
-            let hdr = [ [ 'Tubes' ] ]
-            let arr = data.map((currentValue, index, arr) => {
-              return [ currentValue ]
-            })
-            tubeList.setData(hdr.concat(arr))
-            tubeList.focus()
-            screen.render()
-          })
-      }
-    },
-    Exit: {
-      keys: [ 'q', 'escape' ],
-      callback: () => { process.exit(0) }
+  border: {
+    type: 'line'
+  },
+  top: 2,
+  left: 20,
+  height: 14,
+  align: 'right',
+  vi: true,
+  style: {
+    header: {
+      bold: true
     }
   }
 })
@@ -108,6 +75,31 @@ const tubeList = blessed.listtable({
   }
 })
 
+const menuBar = new MenuBar(screen, clientApi, statsList, tubeList)
+
+blessed.listbar({
+  parent: screen,
+  mouse: true,
+  keys: true,
+  top: 0,
+  left: 0,
+  height: 1,
+  commands: {
+    Invoke: {
+      keys: [ 'i' ],
+      callback: () => menuBar.invoke()
+    },
+    Tubes: {
+      keys: [ 't' ],
+      callback: () => menuBar.tubes() // {
+    },
+    Exit: {
+      keys: [ 'q', 'escape' ],
+      callback: () => menuBar.exit() // { process.exit(0) }
+    }
+  }
+})
+
 tubeList.on('select', (data, index) => {
   clientApi.get('/tubes/' + clientApi.urlTubeName(data.content.trim()), {})
     .then((data) => {
@@ -121,27 +113,9 @@ tubeList.on('select', (data, index) => {
         [ 'current_waiting', '' + data['current_waiting'] ],
         [ 'total_jobs', '' + data['total_jobs'] ]
       ]
-      results.setData(hdr.concat(arr))
+      statsList.setData(hdr.concat(arr))
       screen.render()
     })
-})
-
-const results = blessed.listtable({
-  parent: screen,
-  mouse: true,
-  border: {
-    type: 'line'
-  },
-  top: 2,
-  left: 20,
-  height: 14,
-  align: 'right',
-  vi: true,
-  style: {
-    header: {
-      bold: true
-    }
-  }
 })
 
 screen.render()
