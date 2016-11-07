@@ -1,5 +1,8 @@
 'use strict'
 
+const TubeAttributes = require('./stats_config').TubeAttributes
+const HeaderLabels = require('./stats_config').HeaderLabels
+
 class TubeList {
   constructor (screen, clientApi, statsList) {
     this._screen = screen
@@ -10,17 +13,10 @@ class TubeList {
   select (data, index) {
     this._clientApi.get('/tubes/' + this._clientApi.urlTubeName(data.content.trim()), {})
       .then((data) => {
-        let hdr = [ [ 'Attribute', 'Value' ] ]
-        let arr = [
-          [ 'current_jobs_ready', '' + data['current_jobs_ready'] ],
-          [ 'current_jobs_urgent', '' + data['current_jobs_urgent'] ],
-          [ 'current_jobs_reserved', '' + data['current_jobs_reserved'] ],
-          [ 'current_jobs_delayed', '' + data['current_jobs_delayed'] ],
-          [ 'current_jobs_buried', '' + data['current_jobs_buried'] ],
-          [ 'current_waiting', '' + data['current_waiting'] ],
-          [ 'total_jobs', '' + data['total_jobs'] ]
-        ]
-        this._statsList.setData(hdr.concat(arr))
+        let arr = TubeAttributes.map((item) => {
+          return [ item, '' + data[item] ]
+        })
+        this._statsList.setData(HeaderLabels.concat(arr))
         this._screen.render()
       })
   }

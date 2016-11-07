@@ -1,5 +1,8 @@
 'use strict'
 
+const TopLevelAttributes = require('./stats_config').TopLevelAttributes
+const HeaderLabels = require('./stats_config').HeaderLabels
+
 class MenuBar {
   constructor (screen, clientApi, statsList, tubeList) {
     this._screen = screen
@@ -11,21 +14,10 @@ class MenuBar {
   invoke () {
     this._clientApi.get('', {})
       .then((data) => {
-        let hdr = [ [ 'Attribute', 'Value' ] ]
-        let arr = [
-          [ 'current_jobs_ready', '' + data['current_jobs_ready'] ],
-          [ 'current_jobs_urgent', '' + data['current_jobs_urgent'] ],
-          [ 'current_jobs_reserved', '' + data['current_jobs_reserved'] ],
-          [ 'current_jobs_delayed', '' + data['current_jobs_delayed'] ],
-          [ 'current_jobs_buried', '' + data['current_jobs_buried'] ],
-          [ 'job_timeouts', '' + data['job_timeouts'] ],
-          [ 'current_tubes', '' + data['current_tubes'] ],
-          [ 'current_connections', '' + data['current_connections'] ],
-          [ 'current_workers', '' + data['current_workers'] ],
-          [ 'current_waiting', '' + data['current_waiting'] ],
-          [ 'total_jobs', '' + data['total_jobs'] ]
-        ]
-        this._statsList.setData(hdr.concat(arr))
+        let arr = TopLevelAttributes.map((item) => {
+          return [ item, '' + data[item] ]
+        })
+        this._statsList.setData(HeaderLabels.concat(arr))
         this._tubeList.setData([])
         this._screen.render()
       })
