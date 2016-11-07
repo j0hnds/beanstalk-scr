@@ -4,6 +4,7 @@
 const blessed = require('blessed')
 const ClientAPI = require('./client_api').ClientAPI
 const MenuBar = require('./menu_bar').MenuBar
+const TubeList = require('./tube_list').TubeList
 const program = require('commander')
 
 program
@@ -31,9 +32,6 @@ screen.title = 'Beanstalk API'
 const statsList = blessed.listtable({
   parent: screen,
   mouse: true,
-  border: {
-    type: 'line'
-  },
   top: 2,
   left: 20,
   height: 14,
@@ -76,6 +74,7 @@ const tubeList = blessed.listtable({
 })
 
 const menuBar = new MenuBar(screen, clientApi, statsList, tubeList)
+const tubeListActions = new TubeList(screen, clientApi, statsList)
 
 blessed.listbar({
   parent: screen,
@@ -100,22 +99,6 @@ blessed.listbar({
   }
 })
 
-tubeList.on('select', (data, index) => {
-  clientApi.get('/tubes/' + clientApi.urlTubeName(data.content.trim()), {})
-    .then((data) => {
-      let hdr = [ [ 'Attribute', 'Value' ] ]
-      let arr = [
-        [ 'current_jobs_ready', '' + data['current_jobs_ready'] ],
-        [ 'current_jobs_urgent', '' + data['current_jobs_urgent'] ],
-        [ 'current_jobs_reserved', '' + data['current_jobs_reserved'] ],
-        [ 'current_jobs_delayed', '' + data['current_jobs_delayed'] ],
-        [ 'current_jobs_buried', '' + data['current_jobs_buried'] ],
-        [ 'current_waiting', '' + data['current_waiting'] ],
-        [ 'total_jobs', '' + data['total_jobs'] ]
-      ]
-      statsList.setData(hdr.concat(arr))
-      screen.render()
-    })
-})
+tubeList.on('select', (data, index) => tubeListActions.select(data, index))
 
 screen.render()
