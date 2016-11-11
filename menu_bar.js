@@ -48,6 +48,9 @@ class MenuBar {
         this._tubeList.setData([])
         this._screen.render()
       })
+      .catch((err) => {
+        console.error('There was an error: %s', err)
+      })
   }
 
   tubes () {
@@ -60,6 +63,9 @@ class MenuBar {
         this._tubeList.setData(hdr.concat(arr))
         this._tubeList.focus()
         this._screen.render()
+      })
+      .catch((err) => {
+        console.error('There was an error: %s', err)
       })
   }
 
