@@ -5,7 +5,9 @@ const blessed = require('blessed')
 const ClientAPI = require('./client_api').ClientAPI
 const MenuBar = require('./menu_bar').MenuBar
 const TubeList = require('./tube_list').TubeList
+const StatsList = require('./stats_list').StatsList
 const program = require('commander')
+const BeanstalkScreen = require('./beanstalk_screen').BeanstalkScreen
 
 program
   .version('1.0.0')
@@ -25,59 +27,15 @@ program
 const clientApi = new ClientAPI(program.server, program.port, program.token, program.nonencrypted)
 
 // Create a screen object
-const screen = blessed.screen({ smartCSR: true })
+const screen = new BeanstalkScreen(clientApi)
 
-screen.title = 'Beanstalk API'
+const statsList = new StatsList(screen.screen())
 
-const statsList = blessed.listtable({
-  parent: screen,
-  mouse: true,
-  top: 2,
-  left: 20,
-  height: 14,
-  align: 'right',
-  vi: true,
-  style: {
-    header: {
-      bold: true
-    }
-  }
-})
-
-const tubeList = blessed.listtable({
-  parent: screen,
-  mouse: true,
-  top: 2,
-  left: 0,
-  height: '100%',
-  align: 'left',
-  interactive: true,
-  keys: [ 'up', 'down' ],
-  vi: true,
-  scrollbar: {
-    bg: 'red',
-    fg: 'blue'
-  },
-  style: {
-    cell: {
-      selected: {
-        inverse: true
-      },
-      hover: {
-        bg: 'green'
-      }
-    },
-    header: {
-      bold: true
-    }
-  }
-})
-
-const menuBar = new MenuBar(screen, clientApi, statsList, tubeList)
-const tubeListActions = new TubeList(screen, clientApi, statsList)
+const tubeList = new TubeList(screen.screen(), clientApi, statsList.statsList())
+const menuBar = new MenuBar(screen.screen(), clientApi, statsList.statsList(), tubeList.tubeList())
 
 blessed.listbar({
-  parent: screen,
+  parent: screen.screen(),
   mouse: true,
   keys: true,
   top: 0,
@@ -98,7 +56,5 @@ blessed.listbar({
     }
   }
 })
-
-tubeList.on('select', (data, index) => tubeListActions.select(data, index))
 
 screen.render()

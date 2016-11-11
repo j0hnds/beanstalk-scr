@@ -25,17 +25,14 @@ class MenuBar {
         Invoke: {
           keys: [ 'i' ],
           callback: () => this.invoke()
-          // callback: () => menuBar.invoke()
         },
         Tubes: {
           keys: [ 't' ],
-          callback: () => this.tubes() // {
-          // callback: () => menuBar.tubes() // {
+          callback: () => this.tubes()
         },
         Exit: {
           keys: [ 'q', 'escape' ],
-          callback: () => this.exit() // { process.exit(0) }
-          // callback: () => menuBar.exit() // { process.exit(0) }
+          callback: () => this.exit()
         }
       }
     })
