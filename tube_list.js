@@ -52,6 +52,7 @@ class TubeList {
         let arr = TubeAttributes.map((item) => {
           return [ item, '' + data[item] ]
         })
+        this._statsList.show()
         this._statsList.setData(HeaderLabels.concat(arr))
         this._screen.render()
       })

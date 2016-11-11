@@ -44,7 +44,10 @@ class MenuBar {
         let arr = TopLevelAttributes.map((item) => {
           return [ item, '' + data[item] ]
         })
+        this._statsList.show()
+        this._statsList.left = 0
         this._statsList.setData(HeaderLabels.concat(arr))
+        this._tubeList.hide()
         this._tubeList.setData([])
         this._screen.render()
       })
@@ -60,8 +63,11 @@ class MenuBar {
         let arr = data.map((currentValue, index, arr) => {
           return [ currentValue ]
         })
+        this._tubeList.show()
         this._tubeList.setData(hdr.concat(arr))
         this._tubeList.focus()
+        this._statsList.hide()
+        this._statsList.left = 20
         this._screen.render()
       })
       .catch((err) => {
