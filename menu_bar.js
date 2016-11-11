@@ -1,5 +1,6 @@
 'use strict'
 
+const blessed = require('blessed')
 const TopLevelAttributes = require('./stats_config').TopLevelAttributes
 const HeaderLabels = require('./stats_config').HeaderLabels
 
@@ -9,6 +10,35 @@ class MenuBar {
     this._clientApi = clientApi
     this._statsList = statsList
     this._tubeList = tubeList
+    this._menuBar = this._buildMenuBar(screen)
+  }
+
+  _buildMenuBar (screen) {
+    return blessed.listbar({
+      parent: screen,
+      mouse: true,
+      keys: true,
+      top: 0,
+      left: 0,
+      height: 1,
+      commands: {
+        Invoke: {
+          keys: [ 'i' ],
+          callback: () => this.invoke()
+          // callback: () => menuBar.invoke()
+        },
+        Tubes: {
+          keys: [ 't' ],
+          callback: () => this.tubes() // {
+          // callback: () => menuBar.tubes() // {
+        },
+        Exit: {
+          keys: [ 'q', 'escape' ],
+          callback: () => this.exit() // { process.exit(0) }
+          // callback: () => menuBar.exit() // { process.exit(0) }
+        }
+      }
+    })
   }
 
   invoke () {
