@@ -5,6 +5,7 @@ const TopLevelAttributes = require('./stats_config').TopLevelAttributes
 const HeaderLabels = require('./stats_config').HeaderLabels
 
 class MenuBar {
+
   constructor (screen, clientApi, statsList, tubeList) {
     this._screen = screen
     this._clientApi = clientApi
@@ -24,21 +25,21 @@ class MenuBar {
       commands: {
         Invoke: {
           keys: [ 'i' ],
-          callback: () => this.invoke()
+          callback: () => this._invoke()
         },
         Tubes: {
           keys: [ 't' ],
-          callback: () => this.tubes()
+          callback: () => this._tubes()
         },
         Exit: {
           keys: [ 'q', 'escape' ],
-          callback: () => this.exit()
+          callback: () => this._exit()
         }
       }
     })
   }
 
-  invoke () {
+  _invoke () {
     this._clientApi.get('', {})
       .then((data) => {
         let arr = TopLevelAttributes.map((item) => {
@@ -56,7 +57,7 @@ class MenuBar {
       })
   }
 
-  tubes () {
+  _tubes () {
     this._clientApi.get('/tubes', {})
       .then((data) => {
         let hdr = [ [ 'Tubes' ] ]
@@ -75,9 +76,10 @@ class MenuBar {
       })
   }
 
-  exit () {
+  _exit () {
     process.exit(0)
   }
+
 }
 
 module.exports.MenuBar = MenuBar
