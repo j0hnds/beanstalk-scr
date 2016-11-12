@@ -2,8 +2,8 @@
 
 'use strict'
 
-const ClientAPI = require('./client_api').ClientAPI
 const program = require('commander')
+const ClientAPI = require('./client_api').ClientAPI
 const BeanstalkScreen = require('./beanstalk_screen').BeanstalkScreen
 
 program
