@@ -4,16 +4,13 @@ const Client = require('node-rest-client').Client
 
 const client = new Client()
 
-const headers = {
-  Authorization: 'Token token="' + process.env.API_TOKEN + '"'
-}
-
 class ClientAPI {
+
   constructor (server, port, token, nonencrypted) {
     this._server = server
     this._port = port
-    this._token = token
     this._nonencrypted = nonencrypted
+    this._headers = { Authorization: 'Token token="' + token + '"' }
   }
 
   _buildUrl (uri) {
@@ -30,7 +27,7 @@ class ClientAPI {
 
   get (uri, args) {
     return new Promise((resolve, reject) => {
-      client.get(this._buildUrl(uri), { data: args, headers: headers }, (data, response) => {
+      client.get(this._buildUrl(uri), { data: args, headers: this._headers }, (data, response) => {
         resolve(data)
       })
     })
