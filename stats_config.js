@@ -18,12 +18,11 @@ module.exports = {
   ],
 
   TubeAttributes: [
-    'current_jobs_ready',
-    'current_jobs_urgent',
-    'current_jobs_reserved',
-    'current_jobs_delayed',
-    'current_jobs_buried',
-    'current_waiting',
-    'total_jobs'
+    'ready',
+    'reserved',
+    'delayed',
+    'buried',
+    'using',
+    'watching'
   ]
 }

@@ -2,7 +2,7 @@
 
 const blessed = require('blessed')
 const TubeAttributes = require('./stats_config').TubeAttributes
-const HeaderLabels = require('./stats_config').HeaderLabels
+// const HeaderLabels = require('./stats_config').HeaderLabels
 
 class TubeList {
   constructor (screen, clientApi, statsList) {
@@ -47,15 +47,18 @@ class TubeList {
   tubeList () { return this._tubeList }
 
   select (data, index) {
-    this._clientApi.get('/tubes/' + this._clientApi.urlTubeName(data.content.trim()), {})
+    let tubeName = data.content.trim()
+    this._clientApi.get(`/${tubeName}`, {})
       .then((data) => {
         let arr = TubeAttributes.map((item) => {
           return [ item, '' + data[item] ]
         })
         this._statsList.show()
-        this._statsList.setData(HeaderLabels.concat(arr))
+        this._statsList.setData([['Tube:', tubeName]].concat(arr))
+        this._statsList.focus()
         this._screen.render()
       })
+      .catch((err) => console.log(err.stack || err))
   }
 }
 

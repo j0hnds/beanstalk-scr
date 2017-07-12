@@ -1,8 +1,6 @@
 'use strict'
 
 const blessed = require('blessed')
-const TopLevelAttributes = require('./stats_config').TopLevelAttributes
-const HeaderLabels = require('./stats_config').HeaderLabels
 
 class MenuBar {
 
@@ -23,10 +21,6 @@ class MenuBar {
       left: 0,
       height: 1,
       commands: {
-        Invoke: {
-          keys: [ 'i' ],
-          callback: () => this._invoke()
-        },
         Tubes: {
           keys: [ 't' ],
           callback: () => this._tubes()
@@ -39,29 +33,11 @@ class MenuBar {
     })
   }
 
-  _invoke () {
+  _tubes () {
     this._clientApi.get('', {})
       .then((data) => {
-        let arr = TopLevelAttributes.map((item) => {
-          return [ item, '' + data[item] ]
-        })
-        this._statsList.show()
-        this._statsList.left = 0
-        this._statsList.setData(HeaderLabels.concat(arr))
-        this._tubeList.hide()
-        this._tubeList.setData([])
-        this._screen.render()
-      })
-      .catch((err) => {
-        console.error('There was an error: %s', err)
-      })
-  }
-
-  _tubes () {
-    this._clientApi.get('/tubes', {})
-      .then((data) => {
         let hdr = [ [ 'Tubes' ] ]
-        let arr = data.map((currentValue, index, arr) => {
+        let arr = data.tubes.map((currentValue, index, arr) => {
           return [ currentValue ]
         })
         this._tubeList.show()

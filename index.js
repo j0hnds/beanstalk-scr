@@ -9,14 +9,15 @@ const BeanstalkScreen = require('./beanstalk_screen').BeanstalkScreen
 program
   .version('1.0.0')
   .option('-s,--server [server]',
-          `Server for beanstalk_api [${process.env.API_SERVER}]`,
-          process.env.API_SERVER)
+          `Server for beanstalk_api [${process.env.VAULT_API_SERVER}]`,
+          process.env.VAULT_API_SERVER)
   .option('-p,--port [port]',
-          'Server port for beanstalk_api')
+          `Server port for beanstalk_api [${process.env.VAULT_API_PORT}]`,
+         process.env.VAULT_API_PORT)
   .option('-t,--token [token]',
-          `API token [${process.env.API_TOKEN}]`,
-          process.env.API_TOKEN)
-  .option('-n,-nonencrypted',
+          `API token [${process.env.VAULT_API_KEY}]`,
+          process.env.VAULT_API_KEY)
+  .option('-n,--nonencrypted',
           'Toggles encrypted request',
           false)
   .parse(process.argv)

@@ -10,7 +10,7 @@ class ClientAPI {
     this._server = server
     this._port = port
     this._nonencrypted = nonencrypted
-    this._headers = { Authorization: 'Token token="' + token + '"' }
+    this._headers = { Authorization: `Bearer ${token}` }
   }
 
   _buildUrl (uri) {
@@ -20,7 +20,7 @@ class ClientAPI {
 
     if (this._port) url += `:${this._port}`
 
-    url += '/beanstalk'
+    url += '/queue'
 
     return url + uri
   }
@@ -28,7 +28,11 @@ class ClientAPI {
   get (uri, args) {
     return new Promise((resolve, reject) => {
       client.get(this._buildUrl(uri), { data: args, headers: this._headers }, (data, response) => {
-        resolve(data)
+        if (response.statusCode === 200) {
+          resolve(data)
+        } else {
+          reject(data)
+        }
       })
     })
   }
