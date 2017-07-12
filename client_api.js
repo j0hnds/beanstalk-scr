@@ -37,6 +37,18 @@ class ClientAPI {
     })
   }
 
+  delete (uri, args) {
+    return new Promise((resolve, reject) => {
+      client.delete(this._buildUrl(uri), { data: args, headers: this._headers }, (data, response) => {
+        if (response.statusCode === 200) {
+          resolve(data)
+        } else {
+          reject(data)
+        }
+      })
+    })
+  }
+
   urlTubeName (tubeName) {
     return new Buffer(tubeName).toString('base64')
   }

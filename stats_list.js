@@ -58,10 +58,15 @@ class StatsList {
   }
 
   drain (data, index) {
-    this._messageBox.show()
-    this._messageBox.setData([[ 'Message' ], ['Do drain']])
-    this._messageBox.focus()
-    this._screen.render()
+    let tube = this._statsList.rows[0][1]
+    this._clientApi.delete(`/${tube}`, {})
+      .then((data) => {
+        this._messageBox.show()
+        this._messageBox.setData([[ 'Message' ], [JSON.stringify(data)]])
+        this._messageBox.focus()
+        this._screen.render()
+      })
+      .catch((err) => console.err(err.stack || err))
   }
 
   peek (data, index) {
