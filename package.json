@@ -2,9 +2,12 @@
   "name": "beanstalk-scr",
   "version": "1.0.0",
   "description": "Curses-like interface to proprietary beanstalk_api.",
-  "main": "index.js",
+  "main": "lib/beanstalk_screen.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "beanstalk_ctl": "./bin/index.js"
   },
   "keywords": [
     "blessed",
