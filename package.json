@@ -1,6 +1,6 @@
 {
   "name": "beanstalk-scr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Curses-like interface to proprietary beanstalk_api.",
   "main": "lib/beanstalk_screen.js",
   "scripts": {
